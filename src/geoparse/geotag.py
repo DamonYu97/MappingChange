@@ -51,7 +51,7 @@ if __name__ == "__main__":
     print("Saving geotagged articles....")
     articles_df = pd.DataFrame(articles)
     result_path = "gaz/geotagged_articles_df.json"
-    cloud_storage.write(articles_df.to_json(orient='records', lines=True), result_path)
+    cloud_storage.write_str(articles_df.to_json(orient='records', lines=True), result_path)
     print(f"result saved to {result_path}")
 
 
