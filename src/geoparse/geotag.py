@@ -1,13 +1,14 @@
 from tqdm import tqdm
 import pandas as pd
-from utils import normalize_name
+from utils import normalize_name, get_google_cloud_storage
 from geoparser import geo_tagging
 
 
 if __name__ == "__main__":
+    cloud_storage = get_google_cloud_storage()
     # load gaz articles
     print("Loading gaz articles....")
-    articles_df = pd.read_json('sources/gaz_articles_simple.json', orient='records', lines=True)
+    articles_df = cloud_storage.read_pandas_json('gaz/gaz_articles_simple.json', orient='records', lines=True)
     print(f"{len(articles_df)} articles loaded")
 
     # geoparse all articles
@@ -49,8 +50,8 @@ if __name__ == "__main__":
     # store articles
     print("Saving geotagged articles....")
     articles_df = pd.DataFrame(articles)
-    result_path = "results/geotagged_articles_df.json"
-    articles_df.to_json(result_path, orient='records', lines=True)
+    result_path = "gaz/geotagged_articles_df.json"
+    cloud_storage.write(articles_df.to_json(orient='records', lines=True), result_path)
     print(f"result saved to {result_path}")
 
 
